@@ -1,0 +1,13 @@
+@import '~antd/dist/antd.css';
+
+body{
+  background: #284156;
+  color: #86c5fa;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
