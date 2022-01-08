@@ -31,15 +31,15 @@ const ColumnTitle = styled.div`
     text-align: left;
     padding: 15px;
     font-size: 17px;
+    line-height: 20px;
 `;
 
-const ProtocolsPage = () => {
-    
+const ProtocolsPage = ({setPage}) => {
     const { protocolsItems } = useProtocolsList();
 
     return (
         <>
-            <PageHeader>
+            <PageHeader >
                 <HeaderTitle>
                     Wybór protokołu
                 </HeaderTitle>
@@ -51,7 +51,7 @@ const ProtocolsPage = () => {
                     <ColumnTitle>Status</ColumnTitle>
                 </ColumnsTitles>
             </PageHeader>
-            <ProtocolItems protocols={protocolsItems}/>
+            <ProtocolItems setPage={setPage} protocols={protocolsItems}/>
         </>
     );
 }

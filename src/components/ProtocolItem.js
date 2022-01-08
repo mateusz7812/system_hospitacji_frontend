@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import ProtocolPrevievPage from './ProtocolPreviewPage'
 
 const Item = styled.div`
     width: 90%;
@@ -18,8 +19,8 @@ const Value = styled.div`
     font-size: 16px;
 `;
 
-export const ProtocolItem = ({protocol}) => {
+export const ProtocolItem = ({protocol, setPage}) => {
     return(
-        <Item><Value>{protocol.data_utworzenia}</Value> <Value>{protocol.charakter}</Value> <Value width={3}>{protocol.kurs}</Value> <Value width={2}>{protocol.przewodniczacy}</Value> <Value>{protocol.status}</Value></Item>
+        <Item onClick={()=>setPage(<ProtocolPrevievPage protocol={protocol} setPage={setPage}/>)}><Value>{protocol.creation_date}</Value> <Value>{protocol.character}</Value> <Value width={3}>{protocol.course}</Value> <Value width={2}>{protocol.committee_head}</Value> <Value>{protocol.status}</Value></Item>
     )
 }

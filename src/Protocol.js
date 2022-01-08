@@ -1,10 +1,10 @@
 export default class Protocol {
-    constructor(id, data_utworzenia, charakter, kurs, przewodniczacy, status){
+    constructor(id, creation_date, character, course, committee_head, status){
         this.id = id
-        this.data_utworzenia = data_utworzenia
-        this.charakter = charakter
-        this.kurs = kurs
-        this.przewodniczacy = przewodniczacy
+        this.creation_date = creation_date
+        this.character = character
+        this.course = course
+        this.committee_head = committee_head
         this.status = status
     }
 }

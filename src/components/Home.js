@@ -25,7 +25,7 @@ const Menu = styled.div`
 const Page = styled.div`
     width: 80%;
     float: right;
-    padding-top: 3vw;
+    padding-top: 2vw;
 `;
 
 const MenuHeader = styled.div`
@@ -77,14 +77,6 @@ const MenuFooterLink = styled.div`
     margin-top: 15px;
 `;
 
-const TodoContainer = styled.div`
-`;
-
-const TabTitle = styled.span`
-    padding-right: 0.75rem;
-`;
-
-
 const BadgeCircle = styled.span`
     box-sizing: border-box;
     border-radius: 10px;
@@ -95,55 +87,29 @@ const BadgeCircle = styled.span`
     text-align: center;
 `;
 
-const AllItemsBadge = styled(BadgeCircle)`
-    background-color: #fff;
-    color: #999;
-    box-shadow: 0 0 0 1px #d9d9d9 inset ;
-`
 
-const CompletedItemBadge = styled(BadgeCircle)`
-    background-color: #52c41a;
-`
+const Home = () => {
+    const [page, setPage] = useState(null);
 
-
-const ToDoHome = () => {
-    const { todoItems, openToDoItems, completeToDoItems } = useToDoList();
-    const [page, setPage] = useState(1);
-
+    const protocolsPage = <ProtocolsPage setPage={setPage}/>
     return (
-/*        <Container>
-            <AddToDo />
-            <TodoContainer>
-                <Tabs defaultActiveKey="1" size={"large"}>
-                    <TabPane tab={
-                        <Badge count={openToDoItems.length} overflowCount={99}><TabTitle>Open</TabTitle></Badge>
-                    } key="1">
-                        <ToDoItems todoItems={openToDoItems} />
-
-                    </TabPane>
-                    <TabPane tab={<Badge count={completeToDoItems.length && <CompletedItemBadge>{completeToDoItems.length}</CompletedItemBadge>} overflowCount={99}>
-                        <TabTitle>Completed</TabTitle></Badge>} key="2">
-                        <ToDoItems todoItems={completeToDoItems} />
-
-                    </TabPane>
-                    <TabPane tab={<Badge count={todoItems.length && <AllItemsBadge>{todoItems.length}</AllItemsBadge>} overflowCount={99}><TabTitle>All</TabTitle></Badge>} key="3">
-                        <ToDoItems todoItems={todoItems} />
-                    </TabPane>
-                </Tabs>
-
-            </TodoContainer>
-        </Container>
-*/
         <Container>
+            {
+                (()=>{
+                    if(page == null){
+                        setPage(protocolsPage)
+                    }
+                })()
+            }
             <Menu> 
                 <MenuHeader>
                     <MenuHeaderTitle>System hospitacji</MenuHeaderTitle>
                     <MenuHeaderSubtitle>Zalogowano jako Adam Kowalski,<br/>Nauczyciel akademicki</MenuHeaderSubtitle>
                 </MenuHeader>
                 <MenuItems>
-                    <MenuItem onClick={()=>setPage(0)}>Hospitacje</MenuItem>
-                    <MenuItem onClick={()=>setPage(1)}>Protokoły</MenuItem>
-                    <MenuItem onClick={()=>setPage(2)}>Komisje hospitacyjne</MenuItem>
+                    <MenuItem onClick={()=>setPage(<HospitalizationsPage/>)}>Hospitacje</MenuItem>
+                    <MenuItem onClick={()=>setPage(protocolsPage)}>Protokoły</MenuItem>
+                    <MenuItem onClick={()=>setPage(<HospitalizationCommitteesPage/>)}>Komisje hospitacyjne</MenuItem>
                 </MenuItems>
                 <MenuFooter>
                     <MenuFooterText>System hospitacji<br/>Politechniki Wrocławskiej</MenuFooterText>
@@ -151,24 +117,10 @@ const ToDoHome = () => {
                 </MenuFooter>
             </Menu>
             <Page> 
-                {(() => {
-                    if (page == 0) {
-                        return (
-                            <HospitalizationsPage/>
-                        )
-                    } else if (page == 1) {
-                        return (
-                            <ProtocolsPage/>
-                        )
-                    } else {
-                        return (
-                            <HospitalizationCommitteesPage/>
-                        )
-                    }
-                    })()}
+                {page}
             </Page>
         </Container>
     );
 }
 
-export default ToDoHome;
+export default Home;
