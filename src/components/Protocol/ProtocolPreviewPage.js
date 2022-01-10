@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProtocolsList } from '../hooks/useProtocolsList';
-import { ProtocolItems } from './ProtocolItems';
 import { ProtocolPreview } from './ProtocolPreview';
 import ProtocolsPage from './ProtocolsPage';
 

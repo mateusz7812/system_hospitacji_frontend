@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProtocolsList } from '../hooks/useProtocolsList';
+import { useProtocolsList } from '../../hooks/Protocol/useProtocolsList';
 import { ProtocolItems } from './ProtocolItems';
 
 const PageHeader = styled.div`
@@ -35,8 +35,9 @@ const ColumnTitle = styled.div`
 `;
 
 const ProtocolsPage = ({setPage}) => {
-    const { protocolsItems } = useProtocolsList();
-
+    const { protocolItems } = useProtocolsList();
+    console.log(JSON.stringify(protocolItems))
+    console.log("test")
     return (
         <>
             <PageHeader >
@@ -51,7 +52,7 @@ const ProtocolsPage = ({setPage}) => {
                     <ColumnTitle>Status</ColumnTitle>
                 </ColumnsTitles>
             </PageHeader>
-            <ProtocolItems setPage={setPage} protocols={protocolsItems}/>
+            <ProtocolItems setPage={setPage} protocols={protocolItems}/>
         </>
     );
 }

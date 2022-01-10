@@ -1,22 +1,21 @@
 import React, {useReducer} from 'react';
 import './App.css';
 import ToDoHome from '../components/Home';
-import { TodoProvider } from '../providers/todoProvider';
-import { todoReducer } from '../reducers/todoReducer';
+import { ProtocolProvider } from '../providers/protocolProvider';
+import { protocolReducer } from '../reducers/protocolReducer'
 const initialState = {
-  todoItems: []
+  protocolItems: []
 };
-
 
 
 const App = () => {
 
-  const state = useReducer(todoReducer, initialState);
+  const state = useReducer(protocolReducer, initialState);
   return (
     <div className="App">
-    <TodoProvider value={state}> 
-      <ToDoHome />
-    </TodoProvider>
+      <ProtocolProvider value={state}> 
+        <ToDoHome />
+      </ProtocolProvider>
     </div>
   );
 }

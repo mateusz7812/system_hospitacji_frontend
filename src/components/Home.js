@@ -1,14 +1,8 @@
 import React, {useState} from 'react';
-import { Tabs, Badge } from 'antd';
 import styled from 'styled-components';
-import AddToDo from './AddToDo';
-import ToDoItems from './ToDoItems';
-import { useToDoList } from '../hooks/useToDoList';
-import { useProtocolsList } from '../hooks/useProtocolsList';
-import ProtocolsPage from './ProtocolsPage';
-import HospitalizationsPage from './HospitalizationsPage';
-import HospitalizationCommitteesPage from './HospitalizationCommittees';
-const { TabPane } = Tabs;
+import ProtocolsPage from './Protocol/ProtocolsPage';
+import HospitalizationsPage from './Hospitalization/HospitalizationsPage';
+import HospitalizationCommitteesPage from './Hospitalization_committee/HospitalizationCommitteesPage';
 
 const Container = styled.div`
     width: 100%;
