@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ProtocolPreview } from './ProtocolPreview';
 import ProtocolsPage from './ProtocolsPage';
+import { useProtocolDetails } from '../../hooks/Protocol/useProtocolDetails';
+import { useProtocolQuestions } from '../../hooks/Protocol/useProtocolQuestions';
+import { useProtocolAnswers } from '../../hooks/Protocol/useProtocolAnswers';
 
 
 const PageHeader = styled.div`
@@ -88,6 +91,10 @@ const PageFooter = styled.div`
 `;
 
 const ProtocolsPreviewPage = ({protocol, setPage}) => {
+    const { protocolDetails } = useProtocolDetails(protocol.id);
+    const { protocolAnswers } = useProtocolAnswers(protocol.id);
+    const { protocolQuestions } = useProtocolQuestions();
+    const [ editing, setEditing ] = useState(false);
     return (
         <>
             <PageHeader >
@@ -110,7 +117,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                 </Values>
             </PageHeader>
             <PageBody>
-                <ProtocolPreview protocol={protocol}/>
+                <ProtocolPreview protocol={protocol} details={protocolDetails} questions={protocolQuestions} answers={protocolAnswers} editing={editing}/>
             </PageBody>
             <PageFooter>
                 <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
@@ -121,9 +128,14 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                             <BlueButton>Odwołaj się</BlueButton>
                         </>)
                     } else if (protocol.character == "Hospitujący"){
-                        return(<>
-                            <BlueButton >Edytuj</BlueButton>
-                        </>)
+                        if(editing)
+                            return(
+                            <BlueButton onClick={()=>setEditing(false)}>Zapisz</BlueButton>
+                            )
+                        else
+                            return(<>
+                                <BlueButton onClick={()=>setEditing(true)}>Edytuj</BlueButton>
+                            </>)
                     }
                 })()}
                 <div style={{clear: "both"}}></div>
