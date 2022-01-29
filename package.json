@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "antd": "^3.16.3",
+    "axios": "^0.25.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8",
     "rxjs": "^6.4.0",
+    "selenium-webdriver": "^4.1.1",
     "styled-components": "^4.2.0",
     "uuid": "^3.3.2"
   },
@@ -30,6 +32,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.0.1",
+    "jest": "^23.6.0"
   }
 }

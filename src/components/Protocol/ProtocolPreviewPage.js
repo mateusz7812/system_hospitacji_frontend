@@ -135,7 +135,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                             <Value width={3}>{protocol.course}</Value> 
                             <Value width={2}>{protocol.committee_head}</Value> 
                             { typeof protocolDetails.protocol !== "undefined" 
-                                ? <Value>{protocolDetails.protocol.status}</Value>
+                                ? <Value id="protocolStatusValue">{protocolDetails.protocol.status}</Value>
                                 : <Value></Value>
                             }
                     </Values>
@@ -148,15 +148,15 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
             <PageFooter>
                 {!signQuestionVisible 
                     ?<>
-                        <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
+                        <BlackButton id="returnButton1" onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
                         {
                             typeof protocolDetails.protocol === "undefined" 
                             ? <></>
                             : protocol.character == "Hospitowany" 
                                 ?protocolDetails.protocol.status === "Wystawiony" 
                                     && <>
-                                        <BlueButton onClick={()=>setSignQuestionVisible(true)} >Podpisz</BlueButton>
-                                        <BlueButton>Odwołaj się</BlueButton>
+                                        <BlueButton id="signButton1" onClick={()=>setSignQuestionVisible(true)} >Podpisz</BlueButton>
+                                        <BlueButton id="issueButton" >Odwołaj się</BlueButton>
                                     </>
                             : protocol.character == "Hospitujący" 
                                 && <>
@@ -170,8 +170,8 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                     </>
                     :<>
                             <SignQuestion>Czy napewno chcesz podpisać protokół? (podpisu nie można wycofać)</SignQuestion>
-                            <BlackButton onClick={()=>setSignQuestionVisible(false)}>Wstecz</BlackButton>
-                            <BlueButton onClick={() => {signProtocol(); }}>Podpisz</BlueButton>
+                            <BlackButton id="returnButton2" onClick={()=>setSignQuestionVisible(false)}>Wstecz</BlackButton>
+                            <BlueButton id="signButton2" onClick={() => {signProtocol(); }}>Podpisz</BlueButton>
                     </>
                 }
                 <div style={{clear: "both"}}></div>
@@ -179,7 +179,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
             { singPopupVisible &&
                 <Popup>
                     <SignQuestion>Protokół został podpisany pomyślnie</SignQuestion><br/>
-                    <BlueButton onClick={()=>setSignPopupVisibility(false)}>Zakończ</BlueButton>
+                    <BlueButton id="signPopupCloseButton" onClick={()=>setSignPopupVisibility(false)}>Zakończ</BlueButton>
                 </Popup>
             }
             { savePopupVisible &&

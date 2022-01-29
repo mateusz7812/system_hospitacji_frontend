@@ -102,9 +102,9 @@ const Home = () => {
                     <MenuHeaderSubtitle>Zalogowano jako Adam Kowalski,<br/>Nauczyciel akademicki</MenuHeaderSubtitle>
                 </MenuHeader>
                 <MenuItems>
-                    <MenuItem onClick={()=>setPage(hospitationsPage)}>Hospitacje</MenuItem>
-                    <MenuItem onClick={()=>setPage(protocolsPage)}>Protokoły</MenuItem>
-                    <MenuItem onClick={()=>setPage(<HospitalizationCommitteesPage/>)}>Komisje hospitacyjne</MenuItem>
+                    <MenuItem id='HospitationsMenuItem' onClick={()=>setPage(hospitationsPage)}>Hospitacje</MenuItem>
+                    <MenuItem id='ProtocolsMenuItem' onClick={()=>setPage(protocolsPage)}>Protokoły</MenuItem>
+                    <MenuItem id='HospitalizationCommitteesMenuItem' onClick={()=>setPage(<HospitalizationCommitteesPage/>)}>Komisje hospitacyjne</MenuItem>
                 </MenuItems>
                 <MenuFooter>
                     <MenuFooterText>System hospitacji<br/>Politechniki Wrocławskiej</MenuFooterText>

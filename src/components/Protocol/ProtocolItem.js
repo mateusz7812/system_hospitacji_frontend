@@ -21,6 +21,6 @@ const Value = styled.div`
 
 export const ProtocolItem = ({protocol, setPage}) => {
     return(
-        <Item onClick={()=>setPage(<ProtocolPrevievPage protocol={protocol} setPage={setPage}/>)}><Value>{protocol.creation_date}</Value> <Value>{protocol.character}</Value> <Value width={3}>{protocol.course}</Value> <Value width={2}>{protocol.committee_head}</Value> <Value>{protocol.status}</Value></Item>
+        <Item id={protocol.id} onClick={()=>setPage(<ProtocolPrevievPage protocol={protocol} setPage={setPage}/>)}><Value>{protocol.creation_date}</Value> <Value>{protocol.character}</Value> <Value width={3}>{protocol.course}</Value> <Value width={2}>{protocol.committee_head}</Value> <Value>{protocol.status}</Value></Item>
     )
 }
