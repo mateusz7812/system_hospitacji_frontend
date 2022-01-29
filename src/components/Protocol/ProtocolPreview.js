@@ -76,7 +76,7 @@ const ProtocolHospitalizationCommittees = ({hospitals}) =>{
             <SectionHeader>Zespół hospitujący:</SectionHeader>
             {
                 hospitals.map((m) => 
-                <ComissionMember member={m}/>)
+                <ComissionMember key={m.first_name + m.last_name} member={m}/>)
             }
         </Container>
     )
@@ -95,16 +95,16 @@ const ProtocolIntroductoryInformation = ({ hospitalized, course, group }) => {
     )
 }
 
-const Field = ({ className, field, answer, editing }) => {
+const Field = ({ className, question_id, field, answer, editing, onAnswerEdit }) => {
     let name = field.substr(1, field.search(':') - 1);
     let type = field.substr(field.search(':') + 1, field.length - field.search(':') - 2);
     return(
         <span className={className}>{
             editing 
             ? 
-                type == "int" ? <input type='number' value={answer[name]}/>
-                : type == "text_area" ? <textarea>{answer[name]}</textarea>
-                : type.includes('/') ? type.split('/').map(m => <><input type='radio' id={name+m} name={name} value={m} defaultChecked={answer[name] == m}/><label for={name+m}>{m}</label></>)
+                type == "int" ? <input type='number' defaultValue={answer[name]} onChange={(e) => onAnswerEdit(question_id, name, e.currentTarget.value)}/>
+                : type == "text_area" ? <textarea value={answer[name]}  onChange={(e) => onAnswerEdit(question_id, name, e.currentTarget.value)}></textarea>
+                : type.includes('/') ? type.split('/').map(m => <><input type='radio' onClick={(e) => onAnswerEdit(question_id, name, e.currentTarget.value)} id={name+m} name={name} value={m} defaultChecked={answer[name] == m}/><label for={name+m}>{m}</label></>)
                 : "type not found"
             : typeof answer[name] ==='undefined' ? '...' : answer[name]
         }</span>
@@ -115,7 +115,7 @@ const MainField = styled(Field)`
     float: right;
 `;
 
-const QuestionLine = ({ question, answer, index, editing }) => {
+const QuestionLine = ({ question_id, question, answer, index, editing, onAnswerEdit }) => {
     let regex = /\{[a-z|:|\/|_]*\}/gm;
     let fields = question.match(regex)
     let mainField = fields.shift()
@@ -125,7 +125,7 @@ const QuestionLine = ({ question, answer, index, editing }) => {
         let index = question.search(fields[0])
         if(index == 0){
             question = question.replace(fields[0], '')
-            questionArray.push(<Field answer={answer} field={fields.shift()} editing={editing}/>)
+            questionArray.push(<Field key={question+question_id} question_id={question_id} answer={answer} field={fields.shift()} editing={editing} onAnswerEdit={onAnswerEdit}/>)
         }else{
             let substr = question.substr(0, index)
             questionArray.push(substr)
@@ -134,11 +134,11 @@ const QuestionLine = ({ question, answer, index, editing }) => {
     }
     questionArray.push(question)
     return(
-        <Line>2.{index}&emsp;{questionArray}<MainField answer={answer} field={mainField} editing={editing}/></Line>
+        <Line>2.{index}&emsp;{questionArray}<MainField key={question+question_id} question_id={question_id} answer={answer} field={mainField} editing={editing} onAnswerEdit={onAnswerEdit}/></Line>
     )
 }
 
-const ProtocolFormalAssessment = ({ questions, answers, editing }) => {
+const ProtocolFormalAssessment = ({ questions, answers, editing, onAnswerEdit }) => {
     return(
         <Container>
             <SectionHeader>2. Ocena formalna</SectionHeader>
@@ -147,7 +147,7 @@ const ProtocolFormalAssessment = ({ questions, answers, editing }) => {
                 for(let i = 0; i < questions.length; i++){
                     let question = questions[i];
                     let answer = answers.find(a => a.question_id == question.id) || {"text": JSON.stringify({})}
-                    lines.push(<QuestionLine question={question.text} answer={JSON.parse(answer.text)} index={i+1} editing={editing}/>)
+                    lines.push(<QuestionLine key={question.id} question_id={question.id} question={question.text} answer={JSON.parse(answer.text)} index={i+1} editing={editing} onAnswerEdit={onAnswerEdit}/>)
                 }
                 return lines;
             })()}
@@ -155,17 +155,19 @@ const ProtocolFormalAssessment = ({ questions, answers, editing }) => {
     )
 }
 
-export const ProtocolPreview = ({protocol, details, questions, answers, editing}) => {
+export const ProtocolPreview = ({ protocol, details, questions, answers, editing, onAnswerEdit }) => {
     return(
         <ProtocolContainer>
             <ProtocolHeader date={protocol.creation_date}/>
-            { typeof details !== "undefined" && typeof answers !== "undefined" &&
-                <>
+                { typeof hospitals !== "undefined" &&
                     <ProtocolHospitalizationCommittees hospitals={details.hospitals}/>
-                    <ProtocolIntroductoryInformation hospitalized={details.hospitalized} course={details.course} group={details.group}/>
-                    <ProtocolFormalAssessment questions={questions} answers={answers} editing={editing}/>
-                </>
-            }
+                }      
+                { typeof details !== "undefined" && typeof answers !== "undefined" && 
+                    <>
+                        <ProtocolIntroductoryInformation hospitalized={details.hospitalized} course={details.course} group={details.group}/>
+                        <ProtocolFormalAssessment questions={questions} answers={answers} editing={editing} onAnswerEdit={onAnswerEdit}/>
+                    </>
+                }
         </ProtocolContainer>
     )
 }

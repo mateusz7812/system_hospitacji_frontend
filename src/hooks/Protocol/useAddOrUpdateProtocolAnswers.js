@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchAddOrUpdateProtocolAnswers } from '../api/fetchAddOrUpdateProtocolAnswers';
-import { useToDoContext } from "./useTodoContext";
-import {useCancellablePromise} from '../hooks/useCancellablePromise';
+import { useProtocolContext } from "./useProtocolContext";
+import { fetchAddOrUpdateProtocolAnswers } from '../../api/fetchAddOrUpdateProtocolAnswers';
+import {useCancellablePromise} from '../useCancellablePromise';
 
-export const useAddOrUpdateProtocolAnswers = (protocol_id, protocolAnswers) => {
-  const [ answers, setAnswers ] = useState(protocolAnswers);
-  const [ saving, saveAnswers ] = useState(false);
+export const useAddOrUpdateProtocolAnswers = (protocol_id) => {
+  const [ answers, setAnswers ] = useState([]);
+  const [ saving, changeSaving ] = useState(false);
   const { dispatch } = useProtocolContext();
   const { cancellablePromise } = useCancellablePromise();
 
@@ -14,11 +14,11 @@ export const useAddOrUpdateProtocolAnswers = (protocol_id, protocolAnswers) => {
       if (saving) {
         await cancellablePromise(fetchAddOrUpdateProtocolAnswers(protocol_id, answers));
         dispatch({
-          type: 'ADD_OR_UPDATE_PROTOCOL_ANSWERS',
+          type: 'PROTOCOL_ANSWERS',
           protocol_id: protocol_id,
           protocolAnswers: answers
         });
-        saveAnswers(false);
+        changeSaving(false);
       }
     }
     addTodoApiCall();
@@ -26,15 +26,31 @@ export const useAddOrUpdateProtocolAnswers = (protocol_id, protocolAnswers) => {
     };
   }, [saving]);
 
-
   return {
     answers,
-    onChange: (field_name, new_value) => {
-      new_answers = [...answers]
+    setAnswers,
+    onAnswerEdit: (question_id, field_name, new_value) => {
+      console.log(question_id + " " + field_name + " " + new_value)
+      let new_answers = [...answers]
+      let filtered = new_answers.filter(a => a.question_id == question_id)
+      if(filtered.length == 0){
+        let answer = {}
+        let answer_text = {}
+        answer_text[field_name] = new_value
+        answer["text"] = JSON.stringify(answer_text)
+        answer["question_id"] = question_id
+        new_answers.push(answer)
+      } else {
+        let index = new_answers.indexOf(filtered[0])
+        let answer_text = JSON.parse(new_answers[index]["text"])
+        answer_text[field_name] = new_value
+        new_answers[index]["text"] = JSON.stringify(answer_text)
+      }
       setAnswers(new_answers)
+      console.log(answers)
     },
-    onSave: () => {
-      saveAnswers(true);
+    saveAnswers: () => {
+      changeSaving(true);
     }
   };
 

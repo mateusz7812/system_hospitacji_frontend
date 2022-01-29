@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ProtocolPreview } from './ProtocolPreview';
 import ProtocolsPage from './ProtocolsPage';
 import { useProtocolDetails } from '../../hooks/Protocol/useProtocolDetails';
 import { useProtocolQuestions } from '../../hooks/Protocol/useProtocolQuestions';
 import { useProtocolAnswers } from '../../hooks/Protocol/useProtocolAnswers';
-
+import { useAddOrUpdateProtocolAnswers } from '../../hooks/Protocol/useAddOrUpdateProtocolAnswers';
+import { fetchSignProtocol } from "../../api/fetchSignProtocol";
 
 const PageHeader = styled.div`
     background-color: #333333;
@@ -91,10 +92,16 @@ const PageFooter = styled.div`
 `;
 
 const ProtocolsPreviewPage = ({protocol, setPage}) => {
-    const { protocolDetails } = useProtocolDetails(protocol.id);
+    const { protocolDetails, loadDetails } = useProtocolDetails(protocol.id);
     const { protocolAnswers } = useProtocolAnswers(protocol.id);
     const { protocolQuestions } = useProtocolQuestions();
     const [ editing, setEditing ] = useState(false);
+    const { answers, setAnswers, onAnswerEdit, saveAnswers } = useAddOrUpdateProtocolAnswers(protocol.id)
+    useEffect(() => {loadDetails()}, [])
+    useEffect(() => setAnswers(protocolAnswers), [protocolAnswers])
+    const signProtocol = () => {
+        fetchSignProtocol(protocol.id).then(loadDetails);
+    }
     return (
         <>
             <PageHeader >
@@ -108,29 +115,36 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                     <ColumnTitle width={2}>Przewodniczący komisji hospitacyjnej</ColumnTitle>
                     <ColumnTitle>Status</ColumnTitle>
                 </ColumnsTitles>
-                <Values>
-                    <Value>{protocol.creation_date}</Value> 
-                    <Value>{protocol.character}</Value> 
-                    <Value width={3}>{protocol.course}</Value> 
-                    <Value width={2}>{protocol.committee_head}</Value> 
-                    <Value>{protocol.status}</Value>
-                </Values>
+                    <Values>
+                            <Value>{protocol.creation_date}</Value> 
+                            <Value>{protocol.character}</Value> 
+                            <Value width={3}>{protocol.course}</Value> 
+                            <Value width={2}>{protocol.committee_head}</Value> 
+                            { typeof protocolDetails.protocol !== "undefined" 
+                                ? <Value>{protocolDetails.protocol.status}</Value>
+                                : <Value></Value>
+                            }
+                    </Values>
             </PageHeader>
             <PageBody>
-                <ProtocolPreview protocol={protocol} details={protocolDetails} questions={protocolQuestions} answers={protocolAnswers} editing={editing}/>
+                {JSON.stringify(protocolDetails) != "{}" &&
+                    <ProtocolPreview protocol={protocol} details={protocolDetails} questions={protocolQuestions} answers={answers} editing={editing} onAnswerEdit={onAnswerEdit}/>
+                }
             </PageBody>
             <PageFooter>
                 <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
                 {(()=>{
+                    if(typeof protocolDetails.protocol === "undefined")
+                        return(<></>)
                     if(protocol.character == "Hospitowany"){
                         return(<>
-                            <BlueButton>Podpisz</BlueButton>
+                            {protocolDetails.protocol.status === "Wystawiony" && <BlueButton onClick={signProtocol} >Podpisz</BlueButton>}
                             <BlueButton>Odwołaj się</BlueButton>
                         </>)
                     } else if (protocol.character == "Hospitujący"){
                         if(editing)
                             return(
-                            <BlueButton onClick={()=>setEditing(false)}>Zapisz</BlueButton>
+                            <BlueButton onClick={()=>{saveAnswers(); setEditing(false);}}>Zapisz</BlueButton>
                             )
                         else
                             return(<>
