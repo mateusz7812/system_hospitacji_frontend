@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import ProtocolsPage from './Protocol/ProtocolsPage';
-import HospitalizationsPage from './Hospitalization/HospitalizationsPage';
+import HospitationsPage from './Hospitalization/HospitationsPage.js';
 import HospitalizationCommitteesPage from './Hospitalization_committee/HospitalizationCommitteesPage';
 
 const Container = styled.div`
@@ -86,6 +86,7 @@ const Home = () => {
     const [page, setPage] = useState(null);
 
     const protocolsPage = <ProtocolsPage setPage={setPage}/>
+    const hospitationsPage = <HospitationsPage setPage={setPage}/>
     return (
         <Container>
             {
@@ -101,7 +102,7 @@ const Home = () => {
                     <MenuHeaderSubtitle>Zalogowano jako Adam Kowalski,<br/>Nauczyciel akademicki</MenuHeaderSubtitle>
                 </MenuHeader>
                 <MenuItems>
-                    <MenuItem onClick={()=>setPage(<HospitalizationsPage/>)}>Hospitacje</MenuItem>
+                    <MenuItem onClick={()=>setPage(hospitationsPage)}>Hospitacje</MenuItem>
                     <MenuItem onClick={()=>setPage(protocolsPage)}>Protokoły</MenuItem>
                     <MenuItem onClick={()=>setPage(<HospitalizationCommitteesPage/>)}>Komisje hospitacyjne</MenuItem>
                 </MenuItems>
