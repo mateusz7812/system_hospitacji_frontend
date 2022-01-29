@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useProtocolContext } from "./useProtocolContext";
-import {useCancellablePromise} from '../../hooks/useCancellablePromise';
+import {useCancellablePromise} from '../useCancellablePromise';
 import { fetchProtocolItems } from "../../api/fetchProtocolItems";
 
 export const useProtocolsList = () => {
