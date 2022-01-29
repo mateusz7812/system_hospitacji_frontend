@@ -4,7 +4,6 @@ import { useHospitationsList } from '../../hooks/Hospitations/useHospitationsLis
 import { useProtocolsList } from'../../hooks/Protocol/useProtocolsList';
 import { HospitationItems } from './HospitationItems';
 import ValidationPopup from '../Popups/ValidationPopup';
-import ValidationSuccess from '../Popups/ValidationSuccess';
 import { useState } from 'react';
 
 const PageHeader = styled.div`

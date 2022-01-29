@@ -7,6 +7,7 @@ import { useProtocolQuestions } from '../../hooks/Protocol/useProtocolQuestions'
 import { useProtocolAnswers } from '../../hooks/Protocol/useProtocolAnswers';
 import { useAddOrUpdateProtocolAnswers } from '../../hooks/Protocol/useAddOrUpdateProtocolAnswers';
 import { fetchSignProtocol } from "../../api/fetchSignProtocol";
+import { Popup } from './Popup';
 
 const PageHeader = styled.div`
     background-color: #333333;
@@ -83,6 +84,13 @@ const BlackButton = styled(Button)`
     color: #86c5fa;
 `;
 
+const SignQuestion = styled.div`
+    display: inline;
+    font-size: 20px;
+    font-weight: bolder;
+    line-height: 60px;
+`;
+
 const PageFooter = styled.div`
     background-color: #333333;
     width: 90%;
@@ -96,11 +104,17 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
     const { protocolAnswers } = useProtocolAnswers(protocol.id);
     const { protocolQuestions } = useProtocolQuestions();
     const [ editing, setEditing ] = useState(false);
-    const { answers, setAnswers, onAnswerEdit, saveAnswers } = useAddOrUpdateProtocolAnswers(protocol.id)
+    const { answers, setAnswers, onAnswerEdit, saveAnswers } = useAddOrUpdateProtocolAnswers(protocol.id);
+    const [ signQuestionVisible, setSignQuestionVisible ] = useState(false);
+    const [ singPopupVisible, setSignPopupVisibility ] = useState(false);
+    const [ savePopupVisible, setSavePopupVisibility ] = useState(false);
     useEffect(() => {loadDetails()}, [])
     useEffect(() => setAnswers(protocolAnswers), [protocolAnswers])
     const signProtocol = () => {
+        protocolDetails.protocol.status = 'Podpisany'
         fetchSignProtocol(protocol.id).then(loadDetails);
+        setSignQuestionVisible(false);
+        setSignPopupVisibility(true);
     }
     return (
         <>
@@ -132,28 +146,48 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                 }
             </PageBody>
             <PageFooter>
-                <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
-                {(()=>{
-                    if(typeof protocolDetails.protocol === "undefined")
-                        return(<></>)
-                    if(protocol.character == "Hospitowany"){
-                        return(<>
-                            {protocolDetails.protocol.status === "Wystawiony" && <BlueButton onClick={signProtocol} >Podpisz</BlueButton>}
-                            <BlueButton>Odwołaj się</BlueButton>
-                        </>)
-                    } else if (protocol.character == "Hospitujący"){
-                        if(editing)
-                            return(
-                            <BlueButton onClick={()=>{saveAnswers(); setEditing(false);}}>Zapisz</BlueButton>
-                            )
-                        else
-                            return(<>
-                                <BlueButton onClick={()=>setEditing(true)}>Edytuj</BlueButton>
-                            </>)
-                    }
-                })()}
+                {!signQuestionVisible 
+                    ?<>
+                        <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Wstecz</BlackButton>
+                        {
+                            typeof protocolDetails.protocol === "undefined" 
+                            ? <></>
+                            : protocol.character == "Hospitowany" 
+                                ?protocolDetails.protocol.status === "Wystawiony" 
+                                    && <>
+                                        <BlueButton onClick={()=>setSignQuestionVisible(true)} >Podpisz</BlueButton>
+                                        <BlueButton>Odwołaj się</BlueButton>
+                                    </>
+                            : protocol.character == "Hospitujący" 
+                                && <>
+                                    {editing
+                                        ? <BlueButton onClick={()=>{saveAnswers(); setEditing(false); setSavePopupVisibility(true);}}>Zapisz</BlueButton>   
+                                        : <BlueButton onClick={()=>setEditing(true)}>Edytuj</BlueButton>
+                                    }
+                                    <BlueButton>Wystaw</BlueButton>
+                                </>
+                        }
+                    </>
+                    :<>
+                            <SignQuestion>Czy napewno chcesz podpisać protokół? (podpisu nie można wycofać)</SignQuestion>
+                            <BlackButton onClick={()=>setSignQuestionVisible(false)}>Wstecz</BlackButton>
+                            <BlueButton onClick={() => {signProtocol(); }}>Podpisz</BlueButton>
+                    </>
+                }
                 <div style={{clear: "both"}}></div>
             </PageFooter>
+            { singPopupVisible &&
+                <Popup>
+                    <SignQuestion>Protokół został podpisany pomyślnie</SignQuestion><br/>
+                    <BlueButton onClick={()=>setSignPopupVisibility(false)}>Zakończ</BlueButton>
+                </Popup>
+            }
+            { savePopupVisible &&
+                <Popup>
+                    <SignQuestion>Protokół został zapisany pomyślnie</SignQuestion><br/>
+                    <BlueButton onClick={()=>setSavePopupVisibility(false)}>Zakończ</BlueButton>
+                </Popup>
+            }
         </>
     );
 }
