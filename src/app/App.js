@@ -1,18 +1,21 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import ToDoHome from '../components/Home';
+import Home from '../components/Home';
 import { ProtocolProvider } from '../providers/protocolProvider';
 import { protocolReducer } from '../reducers/protocolReducer'
 import { HospitationProvider } from '../providers/hospitationProvider';
 import { hospitationReducer } from '../reducers/hospitationReducer'
+
 const initialState = {
-  protocolItems: []
+  protocolItems: [],
+  protocolDetails: {},
+  protocolQuestions: {},
+  protocolAnswers: {}
 };
 
 const initialState3 = {
   hospitationItems: []
 };
-
 const App = () => {
 
   const state = useReducer(protocolReducer, initialState);
@@ -21,7 +24,7 @@ const App = () => {
     <div className="App">
       <HospitationProvider value={stateee}>
         <ProtocolProvider value={state}> 
-          <ToDoHome />
+          <Home />
         </ProtocolProvider>
       </HospitationProvider>
     </div>
