@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import ProtocolsPage from './Protocol/ProtocolsPage';
 import HospitationsPage from './Hospitalization/HospitationsPage.js';
 import HospitalizationCommitteesPage from './Hospitalization_committee/HospitalizationCommitteesPage';
+import NotificationPopup  from './Popups/NotificationPopup.js';
+//import { useListener } from '../hooks/Listeners/useListener';
+import { useEffect } from "react";
+
 
 const Container = styled.div`
     width: 100%;
@@ -84,9 +88,36 @@ const BadgeCircle = styled.span`
 
 const Home = () => {
     const [page, setPage] = useState(null);
-
+    const [NotiPopup, setNotiPopup] = useState(false);
+    const [date, setDate] = useState("");
+    const [course, setCourse] = useState("");
+    const [major, setMajor] = useState("");
     const protocolsPage = <ProtocolsPage setPage={setPage}/>
     const hospitationsPage = <HospitationsPage setPage={setPage}/>
+
+    useEffect(() => {
+        const sse = new EventSource('http://127.0.0.1:5000/listen');
+        sse.onerror = () => {
+            console.error("sth went wrong!")
+          // error log here
+          // after logging, close the connection   
+          sse.close();
+        }
+    
+        function getRealtimeData(data) {
+            let splited = data.split('|')
+            setDate(splited[0])
+            setCourse(splited[1])
+            setMajor(splited[2])
+
+            setNotiPopup(true)
+        }
+        sse.onmessage = e => getRealtimeData((e.data));
+      
+      return () => {
+        sse.close();
+    }});
+
     return (
         <Container>
             {
@@ -110,10 +141,12 @@ const Home = () => {
                     <MenuFooterText>System hospitacji<br/>Politechniki Wrocławskiej</MenuFooterText>
                     <MenuFooterLink>hospitacje.pwr.edu.pl</MenuFooterLink>
                 </MenuFooter>
+                <button onClick={e=> setNotiPopup(true) }>testetsetestsewgfes</button>
             </Menu>
             <Page> 
                 {page}
             </Page>
+            <NotificationPopup trigger={NotiPopup} setTrigger={setNotiPopup} date={date} course={course} major={major}/>
         </Container>
     );
 }

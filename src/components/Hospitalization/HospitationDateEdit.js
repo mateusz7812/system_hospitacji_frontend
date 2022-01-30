@@ -140,12 +140,14 @@ function save( setPage, hospitation, editedId){
         setPage(<HospitationsPage setPage={setPage} valStatus={true} code={code} />)
     }
     let url = "http://127.0.0.1:5000/hospitations?id=" + editedId + "&date=" + getNewDate()
-    
+    clearChache();
     xhr.open("POST", url, true)
 
     xhr.send("");
 }
-
+function clearChache(){
+    cache.value = ""
+}
 function getNewDate(){
     return cache.value
 }

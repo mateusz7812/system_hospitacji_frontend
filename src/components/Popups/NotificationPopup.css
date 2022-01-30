@@ -1,0 +1,55 @@
+.popup {
+    position: fixed;
+    
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    opacity: 0.1;
+    display: flex;
+}
+
+.popup-inner {
+    font-size: medium;
+    border: solid;
+    border-radius: 15px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 32px;
+    border-color: rgba(121,179,228,255);
+    text-align: left;
+    width: 400px;
+    height: 150px;
+    font-weight: bold;
+    background-color: rgba(30,55,76,255);
+    color: rgba(121,179,228,255);
+}
+
+.popup-inner .close {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgba(122,179,226,255);
+    background-color: rgba(30,55,76,255);;
+    border: 0;
+    font-weight: normal;
+}
+.impsa {
+    display: inline-block;
+    float: left;
+    margin-left: -5px;
+}
+
+.popup-inner .text {
+    width: 70%;
+    font-size: 15px;
+    vertical-align: top;
+    float: left;
+    margin-left: 10px;
+    display: inline-block;
+    font-weight: bold;
+}
