@@ -9,6 +9,6 @@ export const fetchAddOrUpdateProtocolAnswers = (protocol_id, answers) => {
             },
             body: JSON.stringify(answers)
         }    
-    );
+    ).then(response=>response.json());
 }
 

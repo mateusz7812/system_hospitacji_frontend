@@ -8,6 +8,7 @@ import { useProtocolAnswers } from '../../hooks/Protocol/useProtocolAnswers';
 import { useAddOrUpdateProtocolAnswers } from '../../hooks/Protocol/useAddOrUpdateProtocolAnswers';
 import { fetchSignProtocol } from "../../api/fetchSignProtocol";
 import { Popup } from './Popup';
+import usePrevious from '../../hooks/usePrevious';
 
 const PageHeader = styled.div`
     background-color: #333333;
@@ -88,7 +89,8 @@ const SignQuestion = styled.div`
     display: inline;
     font-size: 20px;
     font-weight: bolder;
-    line-height: 60px;
+    line-height: 30px;
+    margin: 15px 0;
 `;
 
 const PageFooter = styled.div`
@@ -104,10 +106,11 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
     const { protocolAnswers } = useProtocolAnswers(protocol.id);
     const { protocolQuestions } = useProtocolQuestions();
     const [ editing, setEditing ] = useState(false);
-    const { answers, setAnswers, onAnswerEdit, saveAnswers } = useAddOrUpdateProtocolAnswers(protocol.id);
+    const { answers, wrongAnswers, setAnswers, onAnswerEdit, saveAnswers, saving } = useAddOrUpdateProtocolAnswers(protocol.id);
     const [ signQuestionVisible, setSignQuestionVisible ] = useState(false);
     const [ singPopupVisible, setSignPopupVisibility ] = useState(false);
     const [ savePopupVisible, setSavePopupVisibility ] = useState(false);
+    const [ wrongAnswersPopupVisible, setWrongAnswersPopupVisibility ] = useState(false);
     useEffect(() => {loadDetails()}, [])
     useEffect(() => setAnswers(protocolAnswers), [protocolAnswers])
     const signProtocol = () => {
@@ -116,11 +119,29 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
         setSignQuestionVisible(false);
         setSignPopupVisibility(true);
     }
+    const previousSaving = usePrevious(saving); 
+    const saveProtocolAnswers = () =>{
+        saveAnswers(); 
+    }
+    useEffect(()=>{
+        if(!saving && previousSaving){
+            if(wrongAnswers.length > 0){
+                setWrongAnswersPopupVisibility(true);
+            }
+            else{
+                setEditing(false); 
+                setSavePopupVisibility(true);
+            }
+        }
+    }, [saving])
+    const isAnswerWrong = (question_id, field_name) => {
+        return wrongAnswers.filter(a => a.question_id == question_id && a.name == field_name).length == 1;
+    }
     return (
         <>
             <PageHeader >
                 <HeaderTitle>
-                    Podgląd protokołu
+                    Podgląd protokołu {saving ? "tak" : "nie"} {previousSaving ? "tak" : "nie"}
                 </HeaderTitle>
                 <ColumnsTitles>
                     <ColumnTitle>Data utworzenia</ColumnTitle>
@@ -142,7 +163,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
             </PageHeader>
             <PageBody>
                 {JSON.stringify(protocolDetails) != "{}" &&
-                    <ProtocolPreview protocol={protocol} details={protocolDetails} questions={protocolQuestions} answers={answers} editing={editing} onAnswerEdit={onAnswerEdit}/>
+                    <ProtocolPreview protocol={protocol} details={protocolDetails} questions={protocolQuestions} answers={answers} editing={editing} onAnswerEdit={onAnswerEdit} isAnswerWrong={isAnswerWrong}/>
                 }
             </PageBody>
             <PageFooter>
@@ -161,7 +182,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                             : protocol.character == "Hospitujący" 
                                 && <>
                                     {editing
-                                        ? <BlueButton onClick={()=>{saveAnswers(); setEditing(false); setSavePopupVisibility(true);}}>Zapisz</BlueButton>   
+                                        ? <BlueButton onClick={saveProtocolAnswers}>Zapisz</BlueButton>   
                                         : <BlueButton onClick={()=>setEditing(true)}>Edytuj</BlueButton>
                                     }
                                     <BlueButton>Wystaw</BlueButton>
@@ -186,6 +207,15 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
                 <Popup>
                     <SignQuestion>Protokół został zapisany pomyślnie</SignQuestion><br/>
                     <BlueButton onClick={()=>setSavePopupVisibility(false)}>Zakończ</BlueButton>
+                </Popup>
+            }
+            { wrongAnswersPopupVisible && 
+                <Popup>
+                    <SignQuestion>Zapisywanie protokołu zakończone niepowodzeniem. <br/> (Poprawne zmiany zostały zapisane)</SignQuestion>
+                    <div>
+                        <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Porzuć</BlackButton>
+                        <BlueButton onClick={()=>setWrongAnswersPopupVisibility(false)} >Popraw</BlueButton>
+                    </div>
                 </Popup>
             }
         </>

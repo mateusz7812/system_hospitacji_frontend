@@ -8,11 +8,12 @@ export const useAddOrUpdateProtocolAnswers = (protocol_id) => {
   const [ saving, changeSaving ] = useState(false);
   const { dispatch } = useProtocolContext();
   const { cancellablePromise } = useCancellablePromise();
-
+  const [ wrongAnswers, setWrongAnswers ] = useState([])
   useEffect(() => {
     const addTodoApiCall = async () => {
       if (saving) {
-        await cancellablePromise(fetchAddOrUpdateProtocolAnswers(protocol_id, answers));
+        const wrong = await cancellablePromise(fetchAddOrUpdateProtocolAnswers(protocol_id, answers));//.then(res => setWrongAnswers(res.json)));
+        setWrongAnswers(wrong);
         dispatch({
           type: 'PROTOCOL_ANSWERS',
           protocol_id: protocol_id,
@@ -28,6 +29,7 @@ export const useAddOrUpdateProtocolAnswers = (protocol_id) => {
 
   return {
     answers,
+    wrongAnswers,
     setAnswers,
     onAnswerEdit: (question_id, field_name, new_value) => {
       console.log(question_id + " " + field_name + " " + new_value)
@@ -51,7 +53,8 @@ export const useAddOrUpdateProtocolAnswers = (protocol_id) => {
     },
     saveAnswers: () => {
       changeSaving(true);
-    }
+    },
+    saving
   };
 
 };

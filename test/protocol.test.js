@@ -1,6 +1,7 @@
 const axios = require('axios');
 const webdriver = require("selenium-webdriver");
 const By = webdriver.By;
+
 function sleep() {
   return new Promise(resolve => setTimeout(resolve, 1000));
 }
