@@ -38,7 +38,7 @@ const ColumnTitle = styled.div`
 
 
 const HospitationsPage = ({setPage, valStatus, code}) => {
-    if(valStatus == undefined)
+    if(valStatus === undefined)
     {
         valStatus = false;
         code = false;    

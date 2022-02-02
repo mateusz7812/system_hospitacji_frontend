@@ -71,16 +71,6 @@ const MenuFooterLink = styled.div`
     margin-top: 15px;
 `;
 
-const BadgeCircle = styled.span`
-    box-sizing: border-box;
-    border-radius: 10px;
-    min-width: 20px;
-    height: 20px;
-    line-height: 20px;
-    white-space: nowrap;
-    text-align: center;
-`;
-
 
 const Home = () => {
     const [page, setPage] = useState(null);
