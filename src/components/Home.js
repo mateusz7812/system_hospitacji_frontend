@@ -141,7 +141,7 @@ const Home = () => {
                     <MenuFooterText>System hospitacji<br/>Politechniki Wrocławskiej</MenuFooterText>
                     <MenuFooterLink>hospitacje.pwr.edu.pl</MenuFooterLink>
                 </MenuFooter>
-                <button onClick={e=> setNotiPopup(true) }>testetsetestsewgfes</button>
+                {/* <button onClick={e=> setNotiPopup(true) }>testetsetestsewgfes</button> */}
             </Menu>
             <Page> 
                 {page}

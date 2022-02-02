@@ -1,4 +1,4 @@
-.popup {
+.popup1 {
     position: fixed;
     
     width: 100%;
@@ -8,7 +8,7 @@
     display: flex;
 }
 
-.popup-inner {
+.popup-inner1 {
     font-size: medium;
     border: solid;
     border-radius: 15px;
@@ -25,7 +25,7 @@
     color: rgba(121,179,228,255);
 }
 
-.popup-inner .close {
+.popup-inner1 .close {
     position: absolute;
     top: 0px;
     right: 10px;

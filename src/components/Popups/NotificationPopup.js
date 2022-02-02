@@ -6,8 +6,8 @@ function NotificationPopup(props) {
         {
             return (
                 <>
-                    <div className="popup"></div>
-                    <div className="popup-inner">
+                    <div className="popup1"></div>
+                    <div className="popup-inner1">
                             {props.children}
                             <button className="close" onClick={() => props.setTrigger(false)}>x</button>
                             <img className="impsa" height={90} width={80} src={imag}></img>
