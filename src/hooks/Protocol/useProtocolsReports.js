@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useProtocolContext } from "./useProtocolContext";
 import {useCancellablePromise} from '../useCancellablePromise';
-import { fetchProtocolItems } from "../../api/fetchProtocolItems";
+import { fetchProtocolReports } from "../../api/fetchProtocolReports";
 
-export const useProtocolsList = () => {
+export const useProtocolsReports = () => {
     const { state, dispatch } = useProtocolContext();
     const { cancellablePromise } = useCancellablePromise();
 
     useEffect(() => {
         const fetchProtocols = async () => {
-            const items = await cancellablePromise(fetchProtocolItems());
+            const items = await cancellablePromise(fetchProtocolReports());
             dispatch({
                     type: 'PROTOCOL_ITEMS',
                     protocolItems: items

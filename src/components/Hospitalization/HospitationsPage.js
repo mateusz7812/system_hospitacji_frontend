@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHospitationsList } from '../../hooks/Hospitations/useHospitationsList';
-import { useProtocolsList } from'../../hooks/Protocol/useProtocolsList';
 import { HospitationItems } from './HospitationItems';
 import ValidationPopup from '../Popups/ValidationPopup';
 import { useState } from 'react';

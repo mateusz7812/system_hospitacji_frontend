@@ -1,5 +1,6 @@
+import { API_ADDRESS } from '../consts';
 
 export const fetchHospitationItems = () => {
-    return fetch('http://127.0.0.1:5000/hospitations').then(response=>response.json());
+    return fetch(API_ADDRESS + '/hospitations').then(response=>response.json());
 }
 

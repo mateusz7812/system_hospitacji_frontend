@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProtocolsList } from '../../hooks/Protocol/useProtocolsList';
+import { useProtocolsReports } from '../../hooks/Protocol/useProtocolsReports';
 import { ProtocolItems } from './ProtocolItems';
 
 const PageHeader = styled.div`
@@ -35,7 +35,7 @@ const ColumnTitle = styled.div`
 `;
 
 const ProtocolsPage = ({setPage}) => {
-    const { protocolItems } = useProtocolsList();
+    const { protocolItems } = useProtocolsReports();
     return (
         <>
             <PageHeader >

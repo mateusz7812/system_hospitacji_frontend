@@ -89,6 +89,13 @@ const SignQuestion = styled.div`
     display: inline;
     font-size: 20px;
     font-weight: bolder;
+    line-height: 60px;
+`;
+
+const PopupHeader = styled.div`
+    display: inline;
+    font-size: 20px;
+    font-weight: bolder;
     line-height: 30px;
     margin: 15px 0;
 `;
@@ -141,7 +148,7 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
         <>
             <PageHeader >
                 <HeaderTitle>
-                    Podgląd protokołu {saving ? "tak" : "nie"} {previousSaving ? "tak" : "nie"}
+                    Podgląd protokołu
                 </HeaderTitle>
                 <ColumnsTitles>
                     <ColumnTitle>Data utworzenia</ColumnTitle>
@@ -199,19 +206,19 @@ const ProtocolsPreviewPage = ({protocol, setPage}) => {
             </PageFooter>
             { singPopupVisible &&
                 <Popup>
-                    <SignQuestion>Protokół został podpisany pomyślnie</SignQuestion><br/>
+                    <PopupHeader>Protokół został podpisany pomyślnie</PopupHeader><br/>
                     <BlueButton id="signPopupCloseButton" onClick={()=>setSignPopupVisibility(false)}>Zakończ</BlueButton>
                 </Popup>
             }
             { savePopupVisible &&
                 <Popup>
-                    <SignQuestion>Protokół został zapisany pomyślnie</SignQuestion><br/>
+                    <PopupHeader>Protokół został zapisany pomyślnie</PopupHeader><br/>
                     <BlueButton onClick={()=>setSavePopupVisibility(false)}>Zakończ</BlueButton>
                 </Popup>
             }
             { wrongAnswersPopupVisible && 
                 <Popup>
-                    <SignQuestion>Zapisywanie protokołu zakończone niepowodzeniem. <br/> (Poprawne zmiany zostały zapisane)</SignQuestion>
+                    <PopupHeader>Zapisywanie protokołu zakończone niepowodzeniem. <br/> (Poprawne zmiany zostały zapisane)</PopupHeader>
                     <div>
                         <BlackButton onClick={()=>setPage(<ProtocolsPage setPage={setPage}/>)}>Porzuć</BlackButton>
                         <BlueButton onClick={()=>setWrongAnswersPopupVisibility(false)} >Popraw</BlueButton>

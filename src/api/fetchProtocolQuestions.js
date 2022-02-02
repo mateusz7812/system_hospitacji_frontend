@@ -1,5 +1,6 @@
+import { API_ADDRESS } from '../consts';
 
 export const fetchProtocolQuestions = () => {
-    return fetch('http://127.0.0.1:5000/protocols/questions').then(response=>response.json());
+    return fetch(API_ADDRESS + '/protocols/questions').then(response=>response.json());
 }
 
