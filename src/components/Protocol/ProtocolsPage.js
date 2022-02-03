@@ -36,8 +36,6 @@ const ColumnTitle = styled.div`
 
 const ProtocolsPage = ({setPage}) => {
     const { protocolItems } = useProtocolsList();
-    console.log(JSON.stringify(protocolItems))
-    console.log("test")
     return (
         <>
             <PageHeader >

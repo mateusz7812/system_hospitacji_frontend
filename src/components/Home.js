@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ProtocolsPage from './Protocol/ProtocolsPage';
 import HospitalizationsPage from './Hospitalization/HospitalizationsPage';
 import HospitalizationCommitteesPage from './Hospitalization_committee/HospitalizationCommitteesPage';
+import HospPage from './Hospitalization_committee/HospitalizationCommitteesPage'
 
 const Container = styled.div`
     width: 100%;
@@ -86,12 +87,13 @@ const Home = () => {
     const [page, setPage] = useState(null);
 
     const protocolsPage = <ProtocolsPage setPage={setPage}/>
+    const hospitalizationCommitteesPage = <HospitalizationCommitteesPage setPage={setPage}/>
     return (
         <Container>
             {
                 (()=>{
                     if(page == null){
-                        setPage(protocolsPage)
+                        setPage(hospitalizationCommitteesPage)
                     }
                 })()
             }
@@ -103,7 +105,7 @@ const Home = () => {
                 <MenuItems>
                     <MenuItem onClick={()=>setPage(<HospitalizationsPage/>)}>Hospitacje</MenuItem>
                     <MenuItem onClick={()=>setPage(protocolsPage)}>Protokoły</MenuItem>
-                    <MenuItem onClick={()=>setPage(<HospitalizationCommitteesPage/>)}>Komisje hospitacyjne</MenuItem>
+                    <MenuItem onClick={()=>setPage(hospitalizationCommitteesPage)}>Komisje hospitacyjne</MenuItem>
                 </MenuItems>
                 <MenuFooter>
                     <MenuFooterText>System hospitacji<br/>Politechniki Wrocławskiej</MenuFooterText>
