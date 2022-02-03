@@ -4,6 +4,7 @@ import { useHospitationsList } from '../../hooks/Hospitations/useHospitationsLis
 import { HospitationItems } from './HospitationItems';
 import cache from '../../cache';
 import HospitationsPage from './HospitationsPage';
+import { fetchEditHospitationDate } from "../../api/fetchEditHospitationDate";
 
 const PageHeader = styled.div`
     background-color: #333333;
@@ -122,30 +123,20 @@ function switchEditMode(){
 
 
 
-function save( setPage, hospitation, editedId){
-    let result = document.querySelector('.result');
-    let code = false;
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if(this.readyState != 4) return;
-        if (this.status == 200) {
-            var data = JSON.parse(this.responseText);
-            if(data != 400)
-                console.log("sukces");
-            else
-                {
-                    code = true;
-                }
+function save( setPage, hospitation_id, editedId){
+    fetchEditHospitationDate(hospitation_id, getNewDate()).then(
+        status => {
+            let code = false;
+            if (status.status != 200){
+                code = true;
+            }
+            setPage(<HospitationsPage setPage={setPage} valStatus={true} code={code} />)
         }
-        setPage(<HospitationsPage setPage={setPage} valStatus={true} code={code} />)
-    }
-    let url = "http://127.0.0.1:5000/hospitations?id=" + editedId + "&date=" + getNewDate()
-    
-    xhr.open("POST", url, true)
-
-    xhr.send("");
+    )
 }
-
+function clearChache(){
+    cache.value = ""
+}
 function getNewDate(){
     return cache.value
 }
@@ -176,7 +167,7 @@ const HospitationDateEdit = ({hospitation, setPage, editedId}) => {
             <HospitationItems setPage={setPage} hospitations={hospitationItems} editedId={editedId}/>
             {
                 editMode? 
-                    <ButtonDefault onClick={() => save(setPage, hospitation, editedId)}>Zapisz</ButtonDefault>:   null
+                    <ButtonDefault onClick={() => save(setPage, '234hospitacja', editedId)}>Zapisz</ButtonDefault>:   null
             }
             {
                 editMode? 
